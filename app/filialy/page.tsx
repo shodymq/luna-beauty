@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import { MapPin, Instagram, Phone, MessageCircle, Clock } from "lucide-react";
 import { branches, brand, buildWhatsAppUrl } from "@/lib/data";
 import CTA from "@/components/sections/CTA";
@@ -119,7 +120,7 @@ export default function FiialyPage() {
   );
 }
 
-function Row({ icon, label, value, dim }: { icon: React.ReactNode; label: string; value: string; dim?: boolean }) {
+function Row({ icon, label, value, dim }: { icon: ReactNode; label: string; value: string; dim?: boolean }) {
   return (
     <div style={{ display: "flex", gap: 12 }}>
       <span style={{ color: "var(--color-gold)", marginTop: 2, flexShrink: 0 }}>{icon}</span>
@@ -135,7 +136,7 @@ function Row({ icon, label, value, dim }: { icon: React.ReactNode; label: string
   );
 }
 
-function RowLink({ icon, label, href, value, external }: { icon: React.ReactNode; label: string; href: string; value: string; external?: boolean }) {
+function RowLink({ icon, label, href, value, external }: { icon: ReactNode; label: string; href: string; value: string; external?: boolean }) {
   return (
     <div style={{ display: "flex", gap: 12 }}>
       <span style={{ color: "var(--color-gold)", marginTop: 2, flexShrink: 0 }}>{icon}</span>

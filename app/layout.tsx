@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import { Cormorant_Garamond, Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/ui/Header";
@@ -72,7 +73,7 @@ const jsonLd2 = {
   sameAs:    ["https://instagram.com/luna_beauty_sallon"],
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="ru" className={`${cormorant.variable} ${inter.variable}`}>
       <head>

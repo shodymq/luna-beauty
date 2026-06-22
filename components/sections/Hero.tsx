@@ -3,7 +3,22 @@
 import { motion, useReducedMotion } from "framer-motion";
 import Link from "next/link";
 import { buildWhatsAppUrl } from "@/lib/data";
-import { fadeUp, fadeIn, arcFadeIn } from "@/lib/animations";
+
+const ease = [0.25, 0.1, 0.25, 1] as const;
+
+function makeVariants(delay: number) {
+  return {
+    initial:  { opacity: 0, y: 20 },
+    animate:  { opacity: 1, y: 0, transition: { duration: 0.45, ease, delay } },
+  };
+}
+
+function makeFadeVariants(delay: number) {
+  return {
+    initial:  { opacity: 0 },
+    animate:  { opacity: 1, transition: { duration: 0.4, ease: "easeOut" as const, delay } },
+  };
+}
 
 function LunaArc() {
   const radii = [40, 60, 80, 100, 120, 140];
@@ -12,14 +27,16 @@ function LunaArc() {
       viewBox="0 0 200 200"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className="luna-arc-bg"
       style={{
-        width:    480,
-        height:   480,
-        top:      "50%",
-        left:     "50%",
+        position:  "absolute",
+        width:     480,
+        height:    480,
+        top:       "50%",
+        left:      "50%",
         transform: "translate(-50%, -50%)",
-        opacity:  0.07,
+        opacity:   0.07,
+        pointerEvents: "none",
+        zIndex:    0,
       }}
       aria-hidden="true"
     >
@@ -38,7 +55,6 @@ function LunaArc() {
 
 export default function Hero() {
   const reduce = useReducedMotion();
-  const v = (variants: object) => (reduce ? {} : variants);
 
   return (
     <section
@@ -65,14 +81,21 @@ export default function Hero() {
       }} />
 
       {/* Luna Arc */}
-      <motion.div {...v(arcFadeIn)} style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none" }}>
-        <LunaArc />
-      </motion.div>
+      {!reduce && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.2, ease: "easeOut", delay: 0.6 }}
+          style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none" }}
+        >
+          <LunaArc />
+        </motion.div>
+      )}
 
       {/* Top accent line */}
       <div style={{
         position:   "absolute",
-        top:        0, left: 0, right: 0,
+        top: 0, left: 0, right: 0,
         height:     1,
         background: "linear-gradient(90deg, transparent, rgba(200,181,96,0.4), transparent)",
       }} />
@@ -88,8 +111,11 @@ export default function Hero() {
       }}>
 
         {/* Gold divider label */}
-        <motion.div {...v({ ...fadeUp, animate: { ...fadeUp.animate, transition: { duration: 0.45, ease: [0.25,0.1,0.25,1], delay: 0 } } })} initial="initial" animate="animate">
-          <div className="gold-divider" style={{ maxWidth: 240, margin: "0 auto 48px" }}>
+        <motion.div
+          {...(reduce ? {} : makeVariants(0))}
+          style={{ marginBottom: 48 }}
+        >
+          <div className="gold-divider" style={{ maxWidth: 240, margin: "0 auto" }}>
             <div className="line" />
             <span className="label">Алматы · 2 филиала</span>
             <div className="line" />
@@ -98,9 +124,7 @@ export default function Hero() {
 
         {/* H1 */}
         <motion.h1
-          initial={reduce ? {} : { opacity: 0, y: 20 }}
-          animate={reduce ? {} : { opacity: 1, y: 0 }}
-          transition={{ duration: 0.45, ease: [0.25,0.1,0.25,1], delay: 0 }}
+          {...(reduce ? {} : makeVariants(0))}
           style={{
             fontFamily:    "var(--font-cormorant), Georgia, serif",
             fontWeight:    300,
@@ -118,9 +142,7 @@ export default function Hero() {
 
         {/* Tagline */}
         <motion.p
-          initial={reduce ? {} : { opacity: 0, y: 20 }}
-          animate={reduce ? {} : { opacity: 1, y: 0 }}
-          transition={{ duration: 0.45, ease: [0.25,0.1,0.25,1], delay: 0.15 }}
+          {...(reduce ? {} : makeVariants(0.15))}
           style={{
             fontFamily:    "var(--font-inter), system-ui, sans-serif",
             fontWeight:    300,
@@ -135,9 +157,7 @@ export default function Hero() {
 
         {/* Services row */}
         <motion.p
-          initial={reduce ? {} : { opacity: 0 }}
-          animate={reduce ? {} : { opacity: 1 }}
-          transition={{ duration: 0.4, ease: "easeOut", delay: 0.3 }}
+          {...(reduce ? {} : makeFadeVariants(0.3))}
           style={{
             fontFamily:    "var(--font-inter), system-ui, sans-serif",
             fontWeight:    400,
@@ -151,11 +171,9 @@ export default function Hero() {
           Маникюр · Волосы · Ресницы · Макияж · Массаж · Мужской зал
         </motion.p>
 
-        {/* Thin gold diamond divider */}
+        {/* Diamond divider */}
         <motion.div
-          initial={reduce ? {} : { opacity: 0 }}
-          animate={reduce ? {} : { opacity: 1 }}
-          transition={{ duration: 0.4, ease: "easeOut", delay: 0.3 }}
+          {...(reduce ? {} : makeFadeVariants(0.3))}
           style={{ display: "flex", alignItems: "center", gap: 12, maxWidth: 200, margin: "0 auto 48px" }}
         >
           <div style={{ flex: 1, height: 1, background: "linear-gradient(90deg, transparent, rgba(200,181,96,0.35))" }} />
@@ -165,9 +183,7 @@ export default function Hero() {
 
         {/* CTA buttons */}
         <motion.div
-          initial={reduce ? {} : { opacity: 0 }}
-          animate={reduce ? {} : { opacity: 1 }}
-          transition={{ duration: 0.4, ease: "easeOut", delay: 0.45 }}
+          {...(reduce ? {} : makeFadeVariants(0.45))}
           style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 16, flexWrap: "wrap" }}
         >
           <a href={buildWhatsAppUrl()} target="_blank" rel="noopener noreferrer" className="btn-primary">
