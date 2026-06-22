@@ -144,7 +144,6 @@ export default function PriceList() {
               onClick={() => setCat(cat)}
               style={{
                 flexShrink:    0,
-                background:    "none",
                 cursor:        "pointer",
                 fontFamily:    "var(--font-inter), system-ui, sans-serif",
                 fontSize:      11,
@@ -155,7 +154,7 @@ export default function PriceList() {
                 border:        catFilter === cat
                   ? "1px solid var(--color-gold)"
                   : "1px solid var(--color-border)",
-                color: catFilter === cat ? "var(--color-gold)" : "var(--color-text-muted)",
+                color:      catFilter === cat ? "var(--color-gold)" : "var(--color-text-muted)",
                 background: catFilter === cat ? "var(--color-gold-faint)" : "transparent",
                 borderRadius: 2,
                 transition:    "border-color 0.2s, color 0.2s",
