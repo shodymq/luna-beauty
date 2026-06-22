@@ -11,14 +11,8 @@ export const metadata: Metadata = {
 export default function FiialyPage() {
   return (
     <>
-      {/* Page header */}
-      <div style={{
-        paddingTop:    120,
-        paddingBottom: 48,
-        background:    "var(--color-bg)",
-        borderBottom:  "1px solid var(--color-border-soft)",
-      }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 80px" }}>
+      <div className="page-header">
+        <div className="page-header-inner">
           <div className="gold-divider" style={{ maxWidth: 160, marginBottom: 24 }}>
             <div className="line" />
             <span className="label">Адреса</span>
@@ -41,21 +35,15 @@ export default function FiialyPage() {
         </div>
       </div>
 
-      {/* Branches */}
-      <section style={{ padding: "80px 0", background: "var(--color-bg)" }}>
+      <section className="filialy-section" style={{ padding: "80px 0", background: "var(--color-bg)" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 80px" }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 32 }}>
+          <div className="filialy-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 32 }}>
             {branches.map((b) => (
-              <div
-                key={b.id}
-                style={{ display: "flex", flexDirection: "column", gap: 24 }}
-              >
+              <div key={b.id} style={{ display: "flex", flexDirection: "column", gap: 24 }}>
                 {/* Info card */}
                 <div style={{
-                  background:   "var(--color-surface)",
-                  border:       "1px solid var(--color-border-soft)",
-                  padding:      "40px",
-                  borderRadius: 2,
+                  background: "var(--color-surface)", border: "1px solid var(--color-border-soft)",
+                  padding: "40px", borderRadius: 2,
                 }}>
                   <div className="gold-divider" style={{ marginBottom: 32 }}>
                     <div className="line" />
@@ -64,18 +52,13 @@ export default function FiialyPage() {
                   </div>
 
                   <div style={{ display: "flex", flexDirection: "column", gap: 20, marginBottom: 32 }}>
-                    {/* Address */}
-                    <Row icon={<MapPin size={14} strokeWidth={1.5} />} label="Адрес" value={`${b.city}, ${b.address}`} />
-
-                    {/* Phone */}
+                    <Row icon={<MapPin size={14} strokeWidth={1.5} />} label="Адрес"         value={`${b.city}, ${b.address}`} />
                     <RowLink
                       icon={<Phone size={14} strokeWidth={1.5} />}
                       label="Телефон"
                       href={`tel:${(b.phone ?? brand.phone).replace(/\s/g, "")}`}
                       value={b.phone ?? brand.phone}
                     />
-
-                    {/* Instagram */}
                     <RowLink
                       icon={<Instagram size={14} strokeWidth={1.5} />}
                       label="Instagram"
@@ -83,8 +66,6 @@ export default function FiialyPage() {
                       value={`@${b.instagram}`}
                       external
                     />
-
-                    {/* Hours */}
                     <Row icon={<Clock size={14} strokeWidth={1.5} />} label="Режим работы" value="Уточняйте по WhatsApp" dim />
                   </div>
 
@@ -105,31 +86,22 @@ export default function FiialyPage() {
 
                 {/* Map placeholder */}
                 <div style={{
-                  background:   "var(--color-surface)",
-                  border:       "1px solid var(--color-border-soft)",
-                  height:       200,
-                  borderRadius: 2,
-                  display:      "flex",
-                  alignItems:   "center",
-                  justifyContent: "center",
-                  position:     "relative",
-                  overflow:     "hidden",
+                  background: "var(--color-surface)", border: "1px solid var(--color-border-soft)",
+                  height: 200, borderRadius: 2,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  position: "relative", overflow: "hidden",
                 }}>
-                  {/* Dot grid */}
                   <div style={{
                     position: "absolute", inset: 0, opacity: 0.04,
-                    backgroundImage:   "radial-gradient(var(--color-gold) 1px, transparent 1px)",
-                    backgroundSize:    "24px 24px",
+                    backgroundImage: "radial-gradient(var(--color-gold) 1px, transparent 1px)",
+                    backgroundSize: "24px 24px",
                   }} />
                   <div style={{ textAlign: "center", position: "relative", zIndex: 1 }}>
                     <MapPin size={20} strokeWidth={1} style={{ color: "var(--color-gold)", margin: "0 auto 10px", display: "block" }} />
                     <p style={{ fontFamily: "var(--font-inter)", fontSize: 12, color: "var(--color-text-muted)", fontWeight: 300, marginBottom: 4 }}>
                       {b.city}, {b.address}
                     </p>
-                    <a
-                      href={b.mapUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <a href={b.mapUrl} target="_blank" rel="noopener noreferrer"
                       style={{ fontFamily: "var(--font-inter)", fontSize: 11, color: "var(--color-gold)", textDecoration: "underline", letterSpacing: "0.05em" }}
                     >
                       Открыть в 2GIS →
@@ -143,14 +115,6 @@ export default function FiialyPage() {
       </section>
 
       <CTA />
-
-      <style jsx global>{`
-        @media (max-width: 768px) {
-          section[style*="padding: 80px 0"] > div { padding: 0 24px !important; }
-          section[style*="padding: 80px 0"] > div > div { grid-template-columns: 1fr !important; }
-          div[style*="paddingTop: 120"] > div { padding: 0 24px !important; }
-        }
-      `}</style>
     </>
   );
 }
@@ -183,8 +147,8 @@ function RowLink({ icon, label, href, value, external }: { icon: React.ReactNode
           href={href}
           target={external ? "_blank" : undefined}
           rel={external ? "noopener noreferrer" : undefined}
-          style={{ fontFamily: "var(--font-inter)", fontSize: 14, fontWeight: 300, color: "var(--color-text)", textDecoration: "none", transition: "color 0.2s" }}
           className="footer-link"
+          style={{ fontFamily: "var(--font-inter)", fontSize: 14, fontWeight: 300, color: "var(--color-text)", textDecoration: "none" }}
         >
           {value}
         </a>

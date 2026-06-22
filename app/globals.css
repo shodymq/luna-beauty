@@ -39,107 +39,104 @@ body {
   }
 }
 
-/* ── Gold Divider (signature) ─────────────────────────────── */
-.gold-divider {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-.gold-divider .line {
-  flex: 1;
-  height: 1px;
-  background: var(--color-gold-muted);
-  opacity: 0.6;
-}
+/* ── Gold Divider ─────────────────────────────────────────── */
+.gold-divider { display: flex; align-items: center; gap: 16px; }
+.gold-divider .line { flex: 1; height: 1px; background: var(--color-gold-muted); opacity: 0.6; }
 .gold-divider .label {
   font-family: var(--font-inter), system-ui, sans-serif;
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.15em;
-  color: var(--color-gold);
-  text-transform: uppercase;
+  font-size: 11px; font-weight: 500; letter-spacing: 0.15em;
+  color: var(--color-gold); text-transform: uppercase;
 }
 
 /* ── Buttons ──────────────────────────────────────────────── */
 .btn-primary {
-  background: var(--color-gold);
-  color: #141414;
+  background: var(--color-gold); color: #141414;
   font-family: var(--font-inter), system-ui, sans-serif;
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  padding: 15px 36px;
-  border-radius: 2px;
-  border: none;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  transition: background 0.2s;
-  text-decoration: none;
+  font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 15px 36px; border-radius: 2px; border: none; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 8px;
+  transition: background 0.2s; text-decoration: none;
 }
 .btn-primary:hover { background: var(--color-gold-bright); }
 
 .btn-ghost {
-  border: 1px solid var(--color-gold-muted);
-  color: var(--color-gold);
+  border: 1px solid var(--color-gold-muted); color: var(--color-gold);
   font-family: var(--font-inter), system-ui, sans-serif;
-  font-size: 11px;
-  font-weight: 400;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  padding: 14px 36px;
-  border-radius: 2px;
-  background: transparent;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  transition: border-color 0.2s, color 0.2s;
-  text-decoration: none;
+  font-size: 11px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 14px 36px; border-radius: 2px; background: transparent; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 8px;
+  transition: border-color 0.2s, color 0.2s; text-decoration: none;
 }
-.btn-ghost:hover {
-  border-color: var(--color-gold);
-  color: var(--color-gold-bright);
-}
+.btn-ghost:hover { border-color: var(--color-gold); color: var(--color-gold-bright); }
 
 /* ── Price rows ────────────────────────────────────────────── */
 .price-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  padding: 14px 0;
-  border-bottom: 1px solid var(--color-border-soft);
-  gap: 16px;
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 14px 0; border-bottom: 1px solid var(--color-border-soft);
+  gap: 16px; margin: 0;
   transition: background 0.15s, margin 0.15s, padding 0.15s;
-  margin: 0;
+  text-decoration: none;
 }
-.price-row:hover {
-  background: var(--color-gold-faint);
-  margin: 0 -16px;
-  padding: 14px 16px;
-}
-.price-row .name {
-  color: var(--color-text);
-  font-size: 14px;
-  font-weight: 300;
-}
+.price-row:hover { background: var(--color-gold-faint); margin: 0 -16px; padding: 14px 16px; }
+.price-row .name { color: var(--color-text); font-size: 14px; font-weight: 300; }
 .price-row .price {
-  color: var(--color-gold);
-  font-family: var(--font-inter), system-ui, sans-serif;
-  font-size: 13px;
-  font-weight: 400;
-  white-space: nowrap;
-  flex-shrink: 0;
-  letter-spacing: 0.02em;
+  color: var(--color-gold); font-family: var(--font-inter), system-ui, sans-serif;
+  font-size: 13px; font-weight: 400; white-space: nowrap; flex-shrink: 0; letter-spacing: 0.02em;
 }
 
-/* ── Luna Arc background ──────────────────────────────────── */
-.luna-arc-bg {
-  position: absolute;
-  pointer-events: none;
-  z-index: 0;
+/* ── Luna Arc ─────────────────────────────────────────────── */
+.luna-arc-bg { position: absolute; pointer-events: none; z-index: 0; }
+
+/* ── Links ────────────────────────────────────────────────── */
+.footer-link { transition: color 0.2s; }
+.footer-link:hover { color: var(--color-gold) !important; }
+
+/* ── Nav ──────────────────────────────────────────────────── */
+.nav-link:hover { color: var(--color-text) !important; }
+
+/* ── Header responsive ────────────────────────────────────── */
+.hidden-mobile { display: flex; }
+.show-mobile   { display: none; }
+
+/* ── Service cards ────────────────────────────────────────── */
+.service-card-inner {
+  background: var(--color-surface); padding: 40px; height: 100%;
+  transition: background 0.2s; border-left: 2px solid transparent;
+}
+.service-card:hover .service-card-inner {
+  background: var(--color-surface-2); border-left-color: var(--color-gold-muted);
+}
+.service-card:hover .service-title { color: var(--color-gold) !important; }
+.service-card:hover .service-arrow { color: var(--color-gold) !important; transform: translateX(4px); }
+
+/* ── Branch cards ─────────────────────────────────────────── */
+.branch-card {
+  background: var(--color-bg); border: 1px solid var(--color-border-soft);
+  padding: 40px; height: 100%; border-radius: 2px; transition: border-color 0.2s;
+}
+.branch-card:hover { border-color: var(--color-gold-muted); }
+
+/* ── Gallery cells ────────────────────────────────────────── */
+.gallery-cell {
+  background: var(--color-surface); border: 1px solid var(--color-border-soft);
+  border-radius: 2px; overflow: hidden; transition: border-color 0.2s;
+}
+.gallery-cell:hover { border-color: var(--color-gold-muted); }
+
+/* ── WhatsApp ─────────────────────────────────────────────── */
+.wa-btn:hover { transform: scale(1.08) !important; }
+
+/* ── Page header (shared across pages) ───────────────────── */
+.page-header {
+  padding-top: 120px;
+  padding-bottom: 48px;
+  background: var(--color-bg);
+  border-bottom: 1px solid var(--color-border-soft);
+}
+.page-header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 80px;
 }
 
 /* ── Scrollbar ────────────────────────────────────────────── */
@@ -149,11 +146,79 @@ body {
 ::-webkit-scrollbar-thumb:hover { background: var(--color-gold-muted); }
 
 /* ── Focus ────────────────────────────────────────────────── */
-:focus-visible {
-  outline: 1px solid var(--color-gold);
-  outline-offset: 2px;
-}
+:focus-visible { outline: 1px solid var(--color-gold); outline-offset: 2px; }
 
-/* ── Hide horizontal scrollbar for chip rows ─────────────── */
+/* ── Chip scrollbar hide ──────────────────────────────────── */
 .chips-scroll::-webkit-scrollbar { display: none; }
 .chips-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* ═══════════════════════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════════════════════ */
+
+/* Header */
+@media (max-width: 768px) {
+  .hidden-mobile { display: none !important; }
+  .show-mobile   { display: flex !important; }
+  header > div   { padding: 0 24px !important; }
+}
+
+/* Footer */
+@media (max-width: 768px) {
+  footer > div { padding: 48px 24px 32px !important; }
+  footer > div > div:first-child { grid-template-columns: 1fr 1fr !important; }
+}
+@media (max-width: 480px) {
+  footer > div > div:first-child { grid-template-columns: 1fr !important; }
+}
+
+/* Page headers */
+@media (max-width: 768px) {
+  .page-header        { padding-top: 100px !important; padding-bottom: 32px !important; }
+  .page-header-inner  { padding: 0 24px !important; }
+}
+
+/* Services section */
+@media (max-width: 900px) {
+  .service-card-inner { padding: 28px 24px !important; }
+}
+@media (max-width: 640px) {
+  section[aria-label="Услуги"] { padding: 64px 0 !important; }
+  section[aria-label="Услуги"] > div { padding: 0 24px !important; }
+  section[aria-label="Услуги"] > div > div:last-child {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Branches section */
+@media (max-width: 768px) {
+  section[aria-label="Наши филиалы"] { padding: 64px 0 !important; }
+  section[aria-label="Наши филиалы"] > div { padding: 0 24px !important; }
+  section[aria-label="Наши филиалы"] > div > div { grid-template-columns: 1fr !important; }
+  .branch-card { padding: 28px 24px !important; }
+}
+
+/* Gallery */
+@media (max-width: 900px) {
+  .gallery-masonry { columns: 2 !important; }
+}
+@media (max-width: 640px) {
+  .gallery-masonry-wrap  { padding: 0 24px 64px !important; }
+  .gallery-banner-wrap   { padding: 24px 24px 16px !important; }
+}
+
+/* Filialy page */
+@media (max-width: 768px) {
+  .filialy-grid { grid-template-columns: 1fr !important; }
+  .filialy-section > div { padding: 0 24px !important; }
+}
+
+/* Uslugi / Price tabs */
+@media (max-width: 768px) {
+  div[role="tablist"] button { padding: 16px 16px 15px !important; font-size: 11px !important; }
+}
+@media (max-width: 640px) {
+  .price-header-inner { padding-left: 24px !important; padding-right: 24px !important; }
+  .chips-wrap         { padding: 16px 24px !important; }
+  .price-list-inner   { padding-left: 24px !important; padding-right: 24px !important; }
+}

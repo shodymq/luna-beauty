@@ -10,13 +10,8 @@ export const metadata: Metadata = {
 export default function UslugiPage() {
   return (
     <>
-      <div style={{
-        paddingTop:   120,
-        paddingBottom: 48,
-        background:   "var(--color-bg)",
-        borderBottom: "1px solid var(--color-border-soft)",
-      }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 80px" }}>
+      <div className="page-header">
+        <div className="page-header-inner price-header-inner">
           <div className="gold-divider" style={{ maxWidth: 200, marginBottom: 24 }}>
             <div className="line" />
             <span className="label">Прайс-лист</span>
@@ -41,12 +36,6 @@ export default function UslugiPage() {
 
       <PriceList />
       <CTA />
-
-      <style jsx global>{`
-        @media (max-width: 640px) {
-          div[style*="paddingTop: 120"] > div { padding: 0 24px !important; }
-        }
-      `}</style>
     </>
   );
 }

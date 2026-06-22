@@ -141,15 +141,6 @@ export default function Footer() {
         </div>
       </div>
 
-      <style jsx global>{`
-        .footer-link:hover { color: var(--color-gold) !important; }
-        @media (max-width: 768px) {
-          footer > div { padding: 48px 24px 32px !important; grid-template-columns: 1fr 1fr !important; }
-        }
-        @media (max-width: 480px) {
-          footer > div { grid-template-columns: 1fr !important; }
-        }
-      `}</style>
     </footer>
   );
 }
