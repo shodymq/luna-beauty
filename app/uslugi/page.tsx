@@ -3,24 +3,37 @@ import PriceList from "@/components/sections/PriceList";
 import CTA from "@/components/sections/CTA";
 
 export const metadata: Metadata = {
-  title: "Услуги и прайс",
-  description:
-    "Полный прайс-лист Luna Beauty Salon Алматы. Маникюр, педикюр, наращивание ресниц, волосы, макияж, массаж, мужской зал. Два филиала.",
+  title:       "Услуги и прайс",
+  description: "Полный прайс-лист Luna Beauty Salon Алматы. Маникюр, педикюр, наращивание ресниц, волосы, макияж, массаж, мужской зал. Два филиала.",
 };
 
 export default function UslugiPage() {
   return (
     <>
-      {/* Page header */}
-      <div className="pt-28 lg:pt-36 pb-12 bg-bg border-b border-border">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6">
-          <div className="gold-divider max-w-xs mb-6">
-            <span>Прайс-лист</span>
+      <div style={{
+        paddingTop:   120,
+        paddingBottom: 48,
+        background:   "var(--color-bg)",
+        borderBottom: "1px solid var(--color-border-soft)",
+      }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 80px" }}>
+          <div className="gold-divider" style={{ maxWidth: 200, marginBottom: 24 }}>
+            <div className="line" />
+            <span className="label">Прайс-лист</span>
+            <div className="line" />
           </div>
-          <h1 className="font-display font-light italic text-5xl sm:text-6xl text-text">
+          <h1 style={{
+            fontFamily:    "var(--font-cormorant), Georgia, serif",
+            fontWeight:    300,
+            fontStyle:     "italic",
+            fontSize:      "clamp(2.5rem, 5vw, 4rem)",
+            letterSpacing: "-0.02em",
+            color:         "var(--color-text)",
+            marginBottom:  14,
+          }}>
             Услуги и цены
           </h1>
-          <p className="font-body text-sm text-text-muted mt-4">
+          <p style={{ fontFamily: "var(--font-inter)", fontSize: 13, fontWeight: 300, color: "var(--color-text-muted)" }}>
             Нажмите на любую услугу, чтобы записаться через WhatsApp
           </p>
         </div>
@@ -28,6 +41,12 @@ export default function UslugiPage() {
 
       <PriceList />
       <CTA />
+
+      <style jsx global>{`
+        @media (max-width: 640px) {
+          div[style*="paddingTop: 120"] > div { padding: 0 24px !important; }
+        }
+      `}</style>
     </>
   );
 }

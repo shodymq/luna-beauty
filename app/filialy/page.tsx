@@ -4,179 +4,137 @@ import { branches, brand, buildWhatsAppUrl } from "@/lib/data";
 import CTA from "@/components/sections/CTA";
 
 export const metadata: Metadata = {
-  title: "Филиалы",
-  description:
-    "Два филиала Luna Beauty Salon в Алматы: ул. Акан серы, 55 и ул. Хаби Халиуллина, 140/9. Адреса, контакты, карты.",
+  title:       "Филиалы",
+  description: "Два филиала Luna Beauty Salon в Алматы: ул. Акан серы, 55 и ул. Хаби Халиуллина, 140/9. Адреса, контакты, карты.",
 };
 
 export default function FiialyPage() {
   return (
     <>
       {/* Page header */}
-      <div className="pt-28 lg:pt-36 pb-12 bg-bg border-b border-border">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="gold-divider max-w-xs mb-6">
-            <span>Адреса</span>
+      <div style={{
+        paddingTop:    120,
+        paddingBottom: 48,
+        background:    "var(--color-bg)",
+        borderBottom:  "1px solid var(--color-border-soft)",
+      }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 80px" }}>
+          <div className="gold-divider" style={{ maxWidth: 160, marginBottom: 24 }}>
+            <div className="line" />
+            <span className="label">Адреса</span>
+            <div className="line" />
           </div>
-          <h1 className="font-display font-light italic text-5xl sm:text-6xl text-text">
+          <h1 style={{
+            fontFamily:    "var(--font-cormorant), Georgia, serif",
+            fontWeight:    300,
+            fontStyle:     "italic",
+            fontSize:      "clamp(2.5rem, 5vw, 4rem)",
+            letterSpacing: "-0.02em",
+            color:         "var(--color-text)",
+            marginBottom:  14,
+          }}>
             Наши филиалы
           </h1>
-          <p className="font-body text-sm text-text-muted mt-4">
+          <p style={{ fontFamily: "var(--font-inter)", fontSize: 13, fontWeight: 300, color: "var(--color-text-muted)" }}>
             Два салона в Алматы — выберите удобный
           </p>
         </div>
       </div>
 
       {/* Branches */}
-      <section className="py-20 bg-bg">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {branches.map((branch) => (
-              <div key={branch.id} className="flex flex-col gap-8">
-                {/* Branch info card */}
-                <div className="bg-surface border border-border p-8 lg:p-10">
-                  <div className="gold-divider mb-8">
-                    <span>{branch.name}</span>
+      <section style={{ padding: "80px 0", background: "var(--color-bg)" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 80px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 32 }}>
+            {branches.map((b) => (
+              <div
+                key={b.id}
+                style={{ display: "flex", flexDirection: "column", gap: 24 }}
+              >
+                {/* Info card */}
+                <div style={{
+                  background:   "var(--color-surface)",
+                  border:       "1px solid var(--color-border-soft)",
+                  padding:      "40px",
+                  borderRadius: 2,
+                }}>
+                  <div className="gold-divider" style={{ marginBottom: 32 }}>
+                    <div className="line" />
+                    <span className="label">{b.name}</span>
+                    <div className="line" />
                   </div>
 
-                  <div className="flex flex-col gap-5">
+                  <div style={{ display: "flex", flexDirection: "column", gap: 20, marginBottom: 32 }}>
                     {/* Address */}
-                    <div className="flex items-start gap-3">
-                      <MapPin size={18} strokeWidth={1.5} className="text-gold mt-0.5 flex-shrink-0" />
-                      <div>
-                        <p className="font-body text-xs text-text-muted uppercase tracking-wide mb-1">
-                          Адрес
-                        </p>
-                        <p className="font-body text-base text-text">
-                          {branch.city}, {branch.address}
-                        </p>
-                      </div>
-                    </div>
+                    <Row icon={<MapPin size={14} strokeWidth={1.5} />} label="Адрес" value={`${b.city}, ${b.address}`} />
 
                     {/* Phone */}
-                    {branch.phone ? (
-                      <div className="flex items-start gap-3">
-                        <Phone size={18} strokeWidth={1.5} className="text-gold mt-0.5 flex-shrink-0" />
-                        <div>
-                          <p className="font-body text-xs text-text-muted uppercase tracking-wide mb-1">
-                            Телефон
-                          </p>
-                          <a
-                            href={`tel:${branch.phone.replace(/\s/g, "")}`}
-                            className="font-body text-base text-text hover:text-gold transition-colors duration-200"
-                          >
-                            {branch.phone}
-                          </a>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="flex items-start gap-3">
-                        <Phone size={18} strokeWidth={1.5} className="text-gold mt-0.5 flex-shrink-0" />
-                        <div>
-                          <p className="font-body text-xs text-text-muted uppercase tracking-wide mb-1">
-                            Телефон
-                          </p>
-                          <a
-                            href={`tel:${brand.phone.replace(/\s/g, "")}`}
-                            className="font-body text-base text-text hover:text-gold transition-colors duration-200"
-                          >
-                            {brand.phone}
-                          </a>
-                        </div>
-                      </div>
-                    )}
+                    <RowLink
+                      icon={<Phone size={14} strokeWidth={1.5} />}
+                      label="Телефон"
+                      href={`tel:${(b.phone ?? brand.phone).replace(/\s/g, "")}`}
+                      value={b.phone ?? brand.phone}
+                    />
 
                     {/* Instagram */}
-                    <div className="flex items-start gap-3">
-                      <Instagram size={18} strokeWidth={1.5} className="text-gold mt-0.5 flex-shrink-0" />
-                      <div>
-                        <p className="font-body text-xs text-text-muted uppercase tracking-wide mb-1">
-                          Instagram
-                        </p>
-                        <a
-                          href={`https://instagram.com/${branch.instagram}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="font-body text-base text-text hover:text-gold transition-colors duration-200"
-                        >
-                          @{branch.instagram}
-                        </a>
-                      </div>
-                    </div>
+                    <RowLink
+                      icon={<Instagram size={14} strokeWidth={1.5} />}
+                      label="Instagram"
+                      href={`https://instagram.com/${b.instagram}`}
+                      value={`@${b.instagram}`}
+                      external
+                    />
 
                     {/* Hours */}
-                    <div className="flex items-start gap-3">
-                      <Clock size={18} strokeWidth={1.5} className="text-gold mt-0.5 flex-shrink-0" />
-                      <div>
-                        <p className="font-body text-xs text-text-muted uppercase tracking-wide mb-1">
-                          Режим работы
-                        </p>
-                        <p className="font-body text-base text-text-muted">
-                          Уточняйте по WhatsApp
-                        </p>
-                      </div>
-                    </div>
+                    <Row icon={<Clock size={14} strokeWidth={1.5} />} label="Режим работы" value="Уточняйте по WhatsApp" dim />
                   </div>
 
-                  {/* Divider */}
-                  <div className="h-px bg-border my-8" />
+                  <div style={{ height: 1, background: "var(--color-border-soft)", marginBottom: 28 }} />
 
-                  {/* CTA buttons */}
-                  <div className="flex flex-col sm:flex-row gap-3">
-                    <a
-                      href={buildWhatsAppUrl()}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center justify-center gap-2 bg-gold text-bg font-body text-sm font-medium tracking-wide px-6 py-3 transition-all duration-200 hover:bg-gold/90"
-                    >
-                      <MessageCircle size={14} />
-                      Записаться
+                  <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+                    <a href={buildWhatsAppUrl()} target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ padding: "13px 24px", gap: 8 }}>
+                      <MessageCircle size={13} /> Записаться
                     </a>
-                    <a
-                      href={`https://instagram.com/${branch.instagram}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center justify-center gap-2 border border-border text-text-muted font-body text-sm px-6 py-3 hover:border-gold/40 hover:text-text transition-all duration-200"
-                    >
-                      <Instagram size={14} />
-                      Instagram
+                    <a href={`https://instagram.com/${b.instagram}`} target="_blank" rel="noopener noreferrer" className="btn-ghost" style={{ padding: "12px 20px", gap: 8 }}>
+                      <Instagram size={13} /> Instagram
                     </a>
-                    <a
-                      href={branch.mapUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center justify-center gap-2 border border-border text-text-muted font-body text-sm px-6 py-3 hover:border-gold/40 hover:text-text transition-all duration-200"
-                    >
-                      <MapPin size={14} />
-                      2GIS
+                    <a href={b.mapUrl} target="_blank" rel="noopener noreferrer" className="btn-ghost" style={{ padding: "12px 20px", gap: 8 }}>
+                      <MapPin size={13} /> 2GIS
                     </a>
                   </div>
                 </div>
 
                 {/* Map placeholder */}
-                <div className="bg-surface border border-border h-56 flex items-center justify-center relative overflow-hidden">
-                  <div className="text-center z-10">
-                    <MapPin size={24} strokeWidth={1} className="text-gold mx-auto mb-3" />
-                    <p className="font-body text-sm text-text-muted mb-1">{branch.city}</p>
-                    <p className="font-body text-xs text-text-muted/60">{branch.address}</p>
+                <div style={{
+                  background:   "var(--color-surface)",
+                  border:       "1px solid var(--color-border-soft)",
+                  height:       200,
+                  borderRadius: 2,
+                  display:      "flex",
+                  alignItems:   "center",
+                  justifyContent: "center",
+                  position:     "relative",
+                  overflow:     "hidden",
+                }}>
+                  {/* Dot grid */}
+                  <div style={{
+                    position: "absolute", inset: 0, opacity: 0.04,
+                    backgroundImage:   "radial-gradient(var(--color-gold) 1px, transparent 1px)",
+                    backgroundSize:    "24px 24px",
+                  }} />
+                  <div style={{ textAlign: "center", position: "relative", zIndex: 1 }}>
+                    <MapPin size={20} strokeWidth={1} style={{ color: "var(--color-gold)", margin: "0 auto 10px", display: "block" }} />
+                    <p style={{ fontFamily: "var(--font-inter)", fontSize: 12, color: "var(--color-text-muted)", fontWeight: 300, marginBottom: 4 }}>
+                      {b.city}, {b.address}
+                    </p>
                     <a
-                      href={branch.mapUrl}
+                      href={b.mapUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-block mt-4 font-body text-xs text-gold hover:text-gold/80 transition-colors duration-200 underline underline-offset-2"
+                      style={{ fontFamily: "var(--font-inter)", fontSize: 11, color: "var(--color-gold)", textDecoration: "underline", letterSpacing: "0.05em" }}
                     >
                       Открыть в 2GIS →
                     </a>
                   </div>
-                  {/* Subtle grid pattern */}
-                  <div
-                    className="absolute inset-0 opacity-[0.04]"
-                    style={{
-                      backgroundImage:
-                        "linear-gradient(var(--color-gold) 1px, transparent 1px), linear-gradient(90deg, var(--color-gold) 1px, transparent 1px)",
-                      backgroundSize: "40px 40px",
-                    }}
-                  />
                 </div>
               </div>
             ))}
@@ -185,6 +143,52 @@ export default function FiialyPage() {
       </section>
 
       <CTA />
+
+      <style jsx global>{`
+        @media (max-width: 768px) {
+          section[style*="padding: 80px 0"] > div { padding: 0 24px !important; }
+          section[style*="padding: 80px 0"] > div > div { grid-template-columns: 1fr !important; }
+          div[style*="paddingTop: 120"] > div { padding: 0 24px !important; }
+        }
+      `}</style>
     </>
+  );
+}
+
+function Row({ icon, label, value, dim }: { icon: React.ReactNode; label: string; value: string; dim?: boolean }) {
+  return (
+    <div style={{ display: "flex", gap: 12 }}>
+      <span style={{ color: "var(--color-gold)", marginTop: 2, flexShrink: 0 }}>{icon}</span>
+      <div>
+        <p style={{ fontFamily: "var(--font-inter)", fontSize: 10, fontWeight: 500, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--color-text-dim)", marginBottom: 4 }}>
+          {label}
+        </p>
+        <p style={{ fontFamily: "var(--font-inter)", fontSize: 14, fontWeight: 300, color: dim ? "var(--color-text-muted)" : "var(--color-text)" }}>
+          {value}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function RowLink({ icon, label, href, value, external }: { icon: React.ReactNode; label: string; href: string; value: string; external?: boolean }) {
+  return (
+    <div style={{ display: "flex", gap: 12 }}>
+      <span style={{ color: "var(--color-gold)", marginTop: 2, flexShrink: 0 }}>{icon}</span>
+      <div>
+        <p style={{ fontFamily: "var(--font-inter)", fontSize: 10, fontWeight: 500, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--color-text-dim)", marginBottom: 4 }}>
+          {label}
+        </p>
+        <a
+          href={href}
+          target={external ? "_blank" : undefined}
+          rel={external ? "noopener noreferrer" : undefined}
+          style={{ fontFamily: "var(--font-inter)", fontSize: 14, fontWeight: 300, color: "var(--color-text)", textDecoration: "none", transition: "color 0.2s" }}
+          className="footer-link"
+        >
+          {value}
+        </a>
+      </div>
+    </div>
   );
 }

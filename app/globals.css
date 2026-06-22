@@ -3,38 +3,35 @@
 @tailwind utilities;
 
 :root {
-  --color-bg: #0d0d0d;
-  --color-surface: #161616;
-  --color-border: #2a2a2a;
-  --color-gold: #c9a96e;
-  --color-gold-muted: #8b7355;
-  --color-text: #f5f0ea;
-  --color-text-muted: #8a8a8a;
-  --color-white: #ffffff;
+  --color-bg:           #141414;
+  --color-surface:      #1C1C1C;
+  --color-surface-2:    #222222;
+  --color-border:       #2E2E2E;
+  --color-border-soft:  #242424;
+  --color-gold:         #C8B560;
+  --color-gold-bright:  #D4C470;
+  --color-gold-muted:   #7A6E3A;
+  --color-gold-faint:   rgba(200, 181, 96, 0.08);
+  --color-text:         #F0EBE0;
+  --color-text-muted:   #7A7570;
+  --color-text-dim:     #4A4540;
 }
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
+*, *::before, *::after { box-sizing: border-box; padding: 0; margin: 0; }
 
-html {
-  scroll-behavior: smooth;
-}
+html { scroll-behavior: smooth; }
 
 body {
   background-color: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-inter), system-ui, sans-serif;
+  font-weight: 300;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
+  *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
@@ -42,62 +39,121 @@ body {
   }
 }
 
-/* Signature gold divider */
+/* ── Gold Divider (signature) ─────────────────────────────── */
 .gold-divider {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  width: 100%;
+  gap: 16px;
 }
-
-.gold-divider::before,
-.gold-divider::after {
-  content: "";
+.gold-divider .line {
   flex: 1;
   height: 1px;
-  background-color: var(--color-gold);
-  opacity: 0.4;
+  background: var(--color-gold-muted);
+  opacity: 0.6;
 }
-
-.gold-divider span {
-  color: var(--color-gold);
+.gold-divider .label {
   font-family: var(--font-inter), system-ui, sans-serif;
-  font-size: 0.6875rem;
+  font-size: 11px;
   font-weight: 500;
   letter-spacing: 0.15em;
+  color: var(--color-gold);
   text-transform: uppercase;
-  white-space: nowrap;
 }
 
-/* Price row dots */
-.price-dots {
-  flex: 1;
-  border-bottom: 1px dotted rgba(201, 169, 110, 0.25);
-  margin: 0 0.5rem;
-  position: relative;
-  top: -4px;
-}
-
-/* Scrollbar */
-::-webkit-scrollbar {
-  width: 4px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--color-bg);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--color-border);
+/* ── Buttons ──────────────────────────────────────────────── */
+.btn-primary {
+  background: var(--color-gold);
+  color: #141414;
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 15px 36px;
   border-radius: 2px;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.2s;
+  text-decoration: none;
+}
+.btn-primary:hover { background: var(--color-gold-bright); }
+
+.btn-ghost {
+  border: 1px solid var(--color-gold-muted);
+  color: var(--color-gold);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 14px 36px;
+  border-radius: 2px;
+  background: transparent;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: border-color 0.2s, color 0.2s;
+  text-decoration: none;
+}
+.btn-ghost:hover {
+  border-color: var(--color-gold);
+  color: var(--color-gold-bright);
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-gold-muted);
+/* ── Price rows ────────────────────────────────────────────── */
+.price-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--color-border-soft);
+  gap: 16px;
+  transition: background 0.15s, margin 0.15s, padding 0.15s;
+  margin: 0;
+}
+.price-row:hover {
+  background: var(--color-gold-faint);
+  margin: 0 -16px;
+  padding: 14px 16px;
+}
+.price-row .name {
+  color: var(--color-text);
+  font-size: 14px;
+  font-weight: 300;
+}
+.price-row .price {
+  color: var(--color-gold);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  white-space: nowrap;
+  flex-shrink: 0;
+  letter-spacing: 0.02em;
 }
 
-/* Focus ring */
+/* ── Luna Arc background ──────────────────────────────────── */
+.luna-arc-bg {
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Scrollbar ────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: var(--color-bg); }
+::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-gold-muted); }
+
+/* ── Focus ────────────────────────────────────────────────── */
 :focus-visible {
-  outline: 2px solid var(--color-gold);
+  outline: 1px solid var(--color-gold);
   outline-offset: 2px;
 }
+
+/* ── Hide horizontal scrollbar for chip rows ─────────────── */
+.chips-scroll::-webkit-scrollbar { display: none; }
+.chips-scroll { -ms-overflow-style: none; scrollbar-width: none; }

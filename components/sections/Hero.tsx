@@ -1,151 +1,207 @@
 "use client";
 
+import { motion, useReducedMotion } from "framer-motion";
 import Link from "next/link";
-import { motion } from "framer-motion";
 import { buildWhatsAppUrl } from "@/lib/data";
+import { fadeUp, fadeIn, arcFadeIn } from "@/lib/animations";
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 28 },
-  visible: (delay: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1], delay },
-  }),
-};
+function LunaArc() {
+  const radii = [40, 60, 80, 100, 120, 140];
+  return (
+    <svg
+      viewBox="0 0 200 200"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className="luna-arc-bg"
+      style={{
+        width:    480,
+        height:   480,
+        top:      "50%",
+        left:     "50%",
+        transform: "translate(-50%, -50%)",
+        opacity:  0.07,
+      }}
+      aria-hidden="true"
+    >
+      {radii.map((r, i) => (
+        <path
+          key={i}
+          d={`M ${100 - r} 160 A ${r} ${r} 0 0 1 ${100 - r * 0.3} ${160 - r * 0.95}`}
+          stroke="#C8B560"
+          strokeWidth="1"
+          opacity={0.9 - i * 0.12}
+        />
+      ))}
+    </svg>
+  );
+}
 
 export default function Hero() {
+  const reduce = useReducedMotion();
+  const v = (variants: object) => (reduce ? {} : variants);
+
   return (
     <section
-      className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-bg"
+      style={{
+        position:       "relative",
+        minHeight:      "100svh",
+        display:        "flex",
+        flexDirection:  "column",
+        alignItems:     "center",
+        justifyContent: "center",
+        overflow:       "hidden",
+        background:     "var(--color-bg)",
+      }}
       aria-label="Главный блок"
     >
-      {/* Grain texture overlay */}
-      <div
-        className="absolute inset-0 pointer-events-none opacity-[0.035]"
-        style={{
-          backgroundImage:
-            "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
-          backgroundSize: "256px 256px",
-        }}
-      />
+      {/* Grain overlay */}
+      <div style={{
+        position:       "absolute",
+        inset:          0,
+        pointerEvents:  "none",
+        opacity:        0.03,
+        backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
+        backgroundSize: "256px 256px",
+      }} />
 
-      {/* Subtle radial gradient */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(ellipse 80% 60% at 50% 40%, rgba(201,169,110,0.04) 0%, transparent 70%)",
-          }}
-        />
-      </div>
+      {/* Luna Arc */}
+      <motion.div {...v(arcFadeIn)} style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none" }}>
+        <LunaArc />
+      </motion.div>
 
-      {/* Top gold accent line */}
-      <motion.div
-        className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/50 to-transparent"
-        initial={{ scaleX: 0 }}
-        animate={{ scaleX: 1 }}
-        transition={{ duration: 1.2, delay: 0.2, ease: "easeOut" }}
-      />
+      {/* Top accent line */}
+      <div style={{
+        position:   "absolute",
+        top:        0, left: 0, right: 0,
+        height:     1,
+        background: "linear-gradient(90deg, transparent, rgba(200,181,96,0.4), transparent)",
+      }} />
 
-      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 text-center">
-        {/* Category tag */}
-        <motion.div
-          custom={0}
-          variants={fadeUp}
-          initial="hidden"
-          animate="visible"
-          className="gold-divider max-w-xs mx-auto mb-10"
-        >
-          <span>Алматы · 2 филиала</span>
+      {/* Content */}
+      <div style={{
+        position:  "relative",
+        zIndex:    1,
+        maxWidth:  800,
+        width:     "100%",
+        padding:   "0 24px",
+        textAlign: "center",
+      }}>
+
+        {/* Gold divider label */}
+        <motion.div {...v({ ...fadeUp, animate: { ...fadeUp.animate, transition: { duration: 0.45, ease: [0.25,0.1,0.25,1], delay: 0 } } })} initial="initial" animate="animate">
+          <div className="gold-divider" style={{ maxWidth: 240, margin: "0 auto 48px" }}>
+            <div className="line" />
+            <span className="label">Алматы · 2 филиала</span>
+            <div className="line" />
+          </div>
         </motion.div>
 
         {/* H1 */}
         <motion.h1
-          custom={0.15}
-          variants={fadeUp}
-          initial="hidden"
-          animate="visible"
-          className="font-display font-light italic text-text leading-[0.9] mb-6"
-          style={{ fontSize: "clamp(3.5rem, 10vw, 6rem)" }}
+          initial={reduce ? {} : { opacity: 0, y: 20 }}
+          animate={reduce ? {} : { opacity: 1, y: 0 }}
+          transition={{ duration: 0.45, ease: [0.25,0.1,0.25,1], delay: 0 }}
+          style={{
+            fontFamily:    "var(--font-cormorant), Georgia, serif",
+            fontWeight:    300,
+            fontStyle:     "italic",
+            fontSize:      "clamp(3.5rem, 10vw, 5.5rem)",
+            letterSpacing: "-0.02em",
+            color:         "var(--color-text)",
+            lineHeight:    0.95,
+            marginBottom:  20,
+          }}
         >
           Luna{" "}
-          <span className="text-gold not-italic font-light">Beauty</span>
+          <span style={{ color: "var(--color-gold)", fontStyle: "normal" }}>Beauty</span>
         </motion.h1>
 
         {/* Tagline */}
         <motion.p
-          custom={0.3}
-          variants={fadeUp}
-          initial="hidden"
-          animate="visible"
-          className="font-body font-light text-lg sm:text-xl text-text-muted tracking-wide mb-4"
+          initial={reduce ? {} : { opacity: 0, y: 20 }}
+          animate={reduce ? {} : { opacity: 1, y: 0 }}
+          transition={{ duration: 0.45, ease: [0.25,0.1,0.25,1], delay: 0.15 }}
+          style={{
+            fontFamily:    "var(--font-inter), system-ui, sans-serif",
+            fontWeight:    300,
+            fontSize:      17,
+            color:         "var(--color-text-muted)",
+            letterSpacing: "0.01em",
+            marginBottom:  16,
+          }}
         >
           Твой идеальный образ — у нас
         </motion.p>
 
         {/* Services row */}
         <motion.p
-          custom={0.42}
-          variants={fadeUp}
-          initial="hidden"
-          animate="visible"
-          className="font-body text-xs font-medium tracking-[0.2em] uppercase text-gold-muted mb-12"
+          initial={reduce ? {} : { opacity: 0 }}
+          animate={reduce ? {} : { opacity: 1 }}
+          transition={{ duration: 0.4, ease: "easeOut", delay: 0.3 }}
+          style={{
+            fontFamily:    "var(--font-inter), system-ui, sans-serif",
+            fontWeight:    400,
+            fontSize:      11,
+            letterSpacing: "0.18em",
+            textTransform: "uppercase",
+            color:         "var(--color-gold-muted)",
+            marginBottom:  48,
+          }}
         >
           Маникюр · Волосы · Ресницы · Макияж · Массаж · Мужской зал
         </motion.p>
 
-        {/* Gold divider line */}
+        {/* Thin gold diamond divider */}
         <motion.div
-          custom={0.5}
-          variants={fadeUp}
-          initial="hidden"
-          animate="visible"
-          className="flex items-center gap-4 max-w-sm mx-auto mb-12"
+          initial={reduce ? {} : { opacity: 0 }}
+          animate={reduce ? {} : { opacity: 1 }}
+          transition={{ duration: 0.4, ease: "easeOut", delay: 0.3 }}
+          style={{ display: "flex", alignItems: "center", gap: 12, maxWidth: 200, margin: "0 auto 48px" }}
         >
-          <div className="flex-1 h-px bg-gradient-to-r from-transparent to-gold/40" />
-          <div className="w-1.5 h-1.5 rounded-full bg-gold/60" />
-          <div className="flex-1 h-px bg-gradient-to-l from-transparent to-gold/40" />
+          <div style={{ flex: 1, height: 1, background: "linear-gradient(90deg, transparent, rgba(200,181,96,0.35))" }} />
+          <div style={{ width: 5, height: 5, background: "var(--color-gold)", transform: "rotate(45deg)", opacity: 0.6 }} />
+          <div style={{ flex: 1, height: 1, background: "linear-gradient(270deg, transparent, rgba(200,181,96,0.35))" }} />
         </motion.div>
 
         {/* CTA buttons */}
         <motion.div
-          custom={0.6}
-          variants={fadeUp}
-          initial="hidden"
-          animate="visible"
-          className="flex flex-col sm:flex-row items-center justify-center gap-4"
+          initial={reduce ? {} : { opacity: 0 }}
+          animate={reduce ? {} : { opacity: 1 }}
+          transition={{ duration: 0.4, ease: "easeOut", delay: 0.45 }}
+          style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 16, flexWrap: "wrap" }}
         >
-          <a
-            href={buildWhatsAppUrl()}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group inline-flex items-center gap-2 bg-gold text-bg font-body text-sm font-medium tracking-wider px-8 py-3.5 transition-all duration-300 hover:bg-gold/90 hover:shadow-lg hover:shadow-gold/20 hover:-translate-y-px"
-          >
+          <a href={buildWhatsAppUrl()} target="_blank" rel="noopener noreferrer" className="btn-primary">
             Записаться
-            <span className="group-hover:translate-x-1 transition-transform duration-200">→</span>
           </a>
-          <Link
-            href="/uslugi"
-            className="inline-flex items-center gap-2 border border-gold/40 text-text font-body text-sm font-medium tracking-wider px-8 py-3.5 transition-all duration-300 hover:border-gold hover:text-gold hover:-translate-y-px"
-          >
+          <Link href="/uslugi" className="btn-ghost">
             Прайс
           </Link>
         </motion.div>
       </div>
 
       {/* Scroll indicator */}
-      <motion.div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.2, duration: 0.5 }}
-      >
-        <span className="font-body text-[10px] tracking-[0.2em] uppercase text-text-muted">
+      <div style={{
+        position:  "absolute",
+        bottom:    32,
+        left:      "50%",
+        transform: "translateX(-50%)",
+        display:   "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap:       8,
+        opacity:   0.4,
+      }}>
+        <p style={{
+          fontFamily:    "var(--font-inter)",
+          fontSize:      10,
+          letterSpacing: "0.2em",
+          textTransform: "uppercase",
+          color:         "var(--color-text-muted)",
+        }}>
           Листать
-        </span>
-        <div className="w-px h-10 bg-gradient-to-b from-gold/40 to-transparent" />
-      </motion.div>
+        </p>
+        <div style={{ width: 1, height: 40, background: "linear-gradient(to bottom, var(--color-gold-muted), transparent)" }} />
+      </div>
     </section>
   );
 }

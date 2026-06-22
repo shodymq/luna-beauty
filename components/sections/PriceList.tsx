@@ -1,119 +1,123 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { priceFilial1, priceFilial2, type PriceCategory, buildWhatsAppUrlForService } from "@/lib/data";
+import { stagger, priceRowVariant } from "@/lib/animations";
 
-const itemVariants = {
-  hidden: { opacity: 0, y: 8 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.35, ease: "easeOut", delay: i * 0.04 },
-  }),
-};
-
-function CategorySection({
-  category,
-  globalIndex,
-}: {
-  category: PriceCategory;
-  globalIndex: number;
-}) {
+function CategoryBlock({ cat }: { cat: PriceCategory }) {
+  const reduce = useReducedMotion();
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration: 0.5, ease: "easeOut", delay: globalIndex * 0.05 }}
-      className="mb-12"
+      initial={reduce ? {} : { opacity: 0, y: 20 }}
+      whileInView={reduce ? {} : { opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.1 }}
+      transition={{ duration: 0.45, ease: [0.25,0.1,0.25,1] }}
+      style={{ marginBottom: 48 }}
     >
-      {/* Category header — signature gold divider */}
-      <div className="gold-divider mb-6">
-        <span>{category.category}</span>
+      {/* Category header */}
+      <div className="gold-divider" style={{ marginBottom: 8 }}>
+        <div className="line" />
+        <span className="label">{cat.category}</span>
+        <div className="line" />
       </div>
 
-      {category.subtitle && (
-        <p className="font-body text-xs text-text-muted text-center mb-6 tracking-wide">
-          {category.subtitle}
+      {cat.subtitle && (
+        <p style={{
+          fontFamily:    "var(--font-inter)",
+          fontSize:      11,
+          fontWeight:    300,
+          color:         "var(--color-text-dim)",
+          textAlign:     "center",
+          letterSpacing: "0.08em",
+          marginBottom:  20,
+          marginTop:     8,
+        }}>
+          {cat.subtitle}
         </p>
       )}
 
       {/* Price rows */}
-      <div className="space-y-0">
-        {category.items.map((item, i) => (
-          <motion.div
+      <motion.div
+        variants={reduce ? {} : stagger}
+        initial="initial"
+        whileInView="animate"
+        viewport={{ once: true, amount: 0.1 }}
+      >
+        {cat.items.map((item, i) => (
+          <motion.a
             key={i}
-            custom={i}
-            variants={itemVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
+            href={buildWhatsAppUrlForService(item.name)}
+            target="_blank"
+            rel="noopener noreferrer"
+            variants={reduce ? {} : priceRowVariant}
+            className="price-row"
+            style={{ display: "flex" }}
           >
-            <a
-              href={buildWhatsAppUrlForService(item.name)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-baseline py-3 border-b border-border/60 group hover:border-gold/30 transition-colors duration-200"
-            >
-              <span className="font-body text-sm text-text group-hover:text-gold/90 transition-colors duration-200 min-w-0">
-                {item.name}
-              </span>
-              <span className="price-dots flex-shrink-0 mx-3" />
-              <span className="font-body text-sm font-medium text-gold whitespace-nowrap flex-shrink-0">
-                {item.price}
-              </span>
-            </a>
-          </motion.div>
+            <span className="name">{item.name}</span>
+            <span className="price">{item.price}</span>
+          </motion.a>
         ))}
-      </div>
+      </motion.div>
     </motion.div>
   );
 }
 
 export default function PriceList() {
-  const [activeTab, setActiveTab] = useState<"fil1" | "fil2">("fil1");
-  const [activeCategory, setActiveCategory] = useState<string>("all");
+  const [tab, setTab]      = useState<"fil1" | "fil2">("fil1");
+  const [catFilter, setCat] = useState<string>("all");
 
-  const currentPrice = activeTab === "fil1" ? priceFilial1 : priceFilial2;
-  const categories = currentPrice.map((c) => c.category);
-  const filtered =
-    activeCategory === "all"
-      ? currentPrice
-      : currentPrice.filter((c) => c.category === activeCategory);
+  const price      = tab === "fil1" ? priceFilial1 : priceFilial2;
+  const categories = price.map((c) => c.category);
+  const filtered   = catFilter === "all" ? price : price.filter((c) => c.category === catFilter);
 
   return (
     <div>
       {/* Branch tabs — sticky */}
-      <div className="sticky top-16 lg:top-20 z-20 bg-bg/95 backdrop-blur-md border-b border-border">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6">
-          <div className="flex" role="tablist" aria-label="Выбор филиала">
-            {[
+      <div style={{
+        position:   "sticky",
+        top:        72,
+        zIndex:     20,
+        background: "rgba(20,20,20,0.97)",
+        backdropFilter: "blur(12px)",
+        borderBottom: "1px solid var(--color-border-soft)",
+      }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 80px" }}>
+          <div role="tablist" aria-label="Выбор филиала" style={{ display: "flex" }}>
+            {([
               { id: "fil1" as const, label: "Филиал 1 — Акан серы" },
               { id: "fil2" as const, label: "Филиал 2 — Хаби Халиуллина" },
-            ].map((tab) => (
+            ] as const).map((t) => (
               <button
-                key={tab.id}
+                key={t.id}
                 role="tab"
-                aria-selected={activeTab === tab.id}
-                onClick={() => {
-                  setActiveTab(tab.id);
-                  setActiveCategory("all");
+                aria-selected={tab === t.id}
+                onClick={() => { setTab(t.id); setCat("all"); }}
+                style={{
+                  background:    "none",
+                  border:        "none",
+                  cursor:        "pointer",
+                  padding:       "18px 32px 17px",
+                  fontFamily:    "var(--font-inter), system-ui, sans-serif",
+                  fontSize:      12,
+                  fontWeight:    400,
+                  letterSpacing: "0.08em",
+                  color:         tab === t.id ? "var(--color-gold)" : "var(--color-text-muted)",
+                  position:      "relative",
+                  transition:    "color 0.2s",
+                  textTransform: "uppercase",
                 }}
-                className={[
-                  "flex-1 sm:flex-none sm:px-8 py-4 font-body text-sm font-medium tracking-wide transition-colors duration-200 relative",
-                  activeTab === tab.id
-                    ? "text-gold"
-                    : "text-text-muted hover:text-text",
-                ].join(" ")}
               >
-                {tab.label}
-                {activeTab === tab.id && (
-                  <motion.div
-                    layoutId="tab-underline"
-                    className="absolute bottom-0 left-0 right-0 h-px bg-gold"
-                    transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                  />
+                {t.label}
+                {tab === t.id && (
+                  <span style={{
+                    position:   "absolute",
+                    bottom:     0,
+                    left:       0,
+                    right:      0,
+                    height:     1,
+                    background: "var(--color-gold)",
+                  }} />
                 )}
               </button>
             ))}
@@ -121,58 +125,74 @@ export default function PriceList() {
         </div>
       </div>
 
-      {/* Category filter chips */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6">
+      {/* Category chips */}
+      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 80px" }}>
         <div
-          className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide"
+          className="chips-scroll"
+          style={{
+            display:        "flex",
+            gap:            8,
+            padding:        "20px 0",
+            overflowX:      "auto",
+          }}
           role="group"
-          aria-label="Фильтр по категориям"
-          style={{ scrollbarWidth: "none" }}
+          aria-label="Фильтр категорий"
         >
-          <button
-            onClick={() => setActiveCategory("all")}
-            className={[
-              "flex-shrink-0 font-body text-xs font-medium tracking-wide px-4 py-2 border transition-all duration-200",
-              activeCategory === "all"
-                ? "border-gold text-gold bg-gold/5"
-                : "border-border text-text-muted hover:border-gold/40 hover:text-text",
-            ].join(" ")}
-          >
-            Все услуги
-          </button>
-          {categories.map((cat) => (
+          {["all", ...categories].map((cat) => (
             <button
               key={cat}
-              onClick={() => setActiveCategory(cat)}
-              className={[
-                "flex-shrink-0 font-body text-xs font-medium tracking-wide px-4 py-2 border transition-all duration-200",
-                activeCategory === cat
-                  ? "border-gold text-gold bg-gold/5"
-                  : "border-border text-text-muted hover:border-gold/40 hover:text-text",
-              ].join(" ")}
+              onClick={() => setCat(cat)}
+              style={{
+                flexShrink:    0,
+                background:    "none",
+                cursor:        "pointer",
+                fontFamily:    "var(--font-inter), system-ui, sans-serif",
+                fontSize:      11,
+                fontWeight:    400,
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+                padding:       "8px 16px",
+                border:        catFilter === cat
+                  ? "1px solid var(--color-gold)"
+                  : "1px solid var(--color-border)",
+                color: catFilter === cat ? "var(--color-gold)" : "var(--color-text-muted)",
+                background: catFilter === cat ? "var(--color-gold-faint)" : "transparent",
+                borderRadius: 2,
+                transition:    "border-color 0.2s, color 0.2s",
+              }}
             >
-              {cat}
+              {cat === "all" ? "Все услуги" : cat}
             </button>
           ))}
         </div>
       </div>
 
       {/* Price list */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 pb-24">
+      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 80px 120px" }}>
         <AnimatePresence mode="wait">
           <motion.div
-            key={activeTab + activeCategory}
+            key={tab + catFilter}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
           >
-            {filtered.map((category, i) => (
-              <CategorySection key={category.category} category={category} globalIndex={i} />
+            {filtered.map((cat) => (
+              <CategoryBlock key={cat.category} cat={cat} />
             ))}
           </motion.div>
         </AnimatePresence>
       </div>
+
+      <style jsx global>{`
+        @media (max-width: 768px) {
+          div[role="tablist"] button { padding: 16px 16px 15px !important; font-size: 11px !important; }
+        }
+        @media (max-width: 640px) {
+          div[aria-label="Фильтр категорий"] { padding: 16px 24px !important; }
+          div[style*="maxWidth: 1200"] { padding-left: 24px !important; padding-right: 24px !important; }
+        }
+      `}</style>
     </div>
   );
 }

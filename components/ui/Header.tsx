@@ -2,143 +2,204 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 const navLinks = [
-  { href: "/", label: "Главная" },
-  { href: "/uslugi", label: "Услуги" },
-  { href: "/gallery", label: "Галерея" },
-  { href: "/filialy", label: "Филиалы" },
+  { href: "/",        label: "Главная"  },
+  { href: "/uslugi",  label: "Услуги"   },
+  { href: "/gallery", label: "Галерея"  },
+  { href: "/filialy", label: "Филиалы"  },
 ];
 
 export default function Header() {
-  const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
-  const pathname = usePathname();
+  const [scrolled, setScrolled]   = useState(false);
+  const [menuOpen, setMenuOpen]   = useState(false);
+  const pathname                  = usePathname();
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    const fn = () => setScrolled(window.scrollY > 24);
+    window.addEventListener("scroll", fn, { passive: true });
+    return () => window.removeEventListener("scroll", fn);
   }, []);
 
-  useEffect(() => {
-    setMenuOpen(false);
-  }, [pathname]);
+  useEffect(() => { setMenuOpen(false); }, [pathname]);
 
   useEffect(() => {
-    if (menuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
+    document.body.style.overflow = menuOpen ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
   }, [menuOpen]);
 
   return (
     <>
       <header
-        className={cn(
-          "fixed top-0 left-0 right-0 z-40 transition-all duration-300",
-          scrolled
-            ? "bg-bg/95 backdrop-blur-md border-b border-gold/20"
-            : "bg-transparent"
-        )}
+        style={{
+          position:   "fixed",
+          top: 0, left: 0, right: 0,
+          zIndex:     40,
+          transition: "border-color 0.3s, background 0.3s",
+          background: scrolled ? "rgba(20,20,20,0.96)" : "transparent",
+          backdropFilter: scrolled ? "blur(12px)" : "none",
+          borderBottom: scrolled ? "1px solid rgba(200,181,96,0.15)" : "1px solid transparent",
+        }}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 lg:h-20">
-            <Link
-              href="/"
-              className="flex flex-col leading-none group"
-              aria-label="Luna Beauty Salon — на главную"
-            >
-              <span className="font-display text-2xl font-light tracking-[0.2em] text-text group-hover:text-gold transition-colors duration-200">
-                LUNA
-              </span>
-              <span className="font-body text-[9px] font-medium tracking-[0.35em] text-gold-muted uppercase mt-[-2px]">
-                Beauty Salon
-              </span>
+        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 80px" }}>
+          <div style={{
+            display: "flex", alignItems: "center", justifyContent: "space-between",
+            height: 72,
+          }}>
+            {/* Logo */}
+            <Link href="/" aria-label="Luna Beauty Salon — на главную" style={{ display: "flex", alignItems: "center" }}>
+              <Image
+                src="/logo.jpg"
+                alt="Luna Beauty Salon"
+                width={48}
+                height={48}
+                style={{ objectFit: "contain", filter: "brightness(1.05)" }}
+                priority
+              />
             </Link>
 
-            <nav className="hidden lg:flex items-center gap-8" aria-label="Основная навигация">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={cn(
-                    "font-body text-sm font-medium tracking-wide transition-colors duration-200 relative",
-                    "after:absolute after:bottom-[-2px] after:left-0 after:right-0 after:h-px after:bg-gold after:scale-x-0 after:transition-transform after:duration-200",
-                    "hover:text-gold hover:after:scale-x-100",
-                    pathname === link.href
-                      ? "text-gold after:scale-x-100"
-                      : "text-text-muted"
-                  )}
-                >
-                  {link.label}
-                </Link>
-              ))}
+            {/* Desktop nav */}
+            <nav
+              style={{ display: "flex", alignItems: "center", gap: 40 }}
+              className="hidden-mobile"
+              aria-label="Основная навигация"
+            >
+              {navLinks.map((link) => {
+                const active = pathname === link.href;
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    style={{
+                      fontFamily:    "var(--font-inter), system-ui, sans-serif",
+                      fontSize:      13,
+                      fontWeight:    400,
+                      letterSpacing: "0.08em",
+                      color:         active ? "var(--color-gold)" : "var(--color-text-muted)",
+                      textDecoration: "none",
+                      transition:    "color 0.2s",
+                      position:      "relative",
+                      paddingBottom:  4,
+                    }}
+                    className={active ? "nav-active" : "nav-link"}
+                  >
+                    {link.label}
+                    {active && (
+                      <span style={{
+                        position:   "absolute",
+                        bottom:     0,
+                        left:       0,
+                        right:      0,
+                        height:     1,
+                        background: "var(--color-gold)",
+                        opacity:    0.6,
+                      }} />
+                    )}
+                  </Link>
+                );
+              })}
             </nav>
 
+            {/* Mobile burger */}
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="lg:hidden p-2 text-text-muted hover:text-gold transition-colors"
+              style={{
+                background: "none", border: "none", cursor: "pointer",
+                color: "var(--color-text-muted)", padding: 8,
+                display: "none",
+              }}
+              className="show-mobile"
               aria-label={menuOpen ? "Закрыть меню" : "Открыть меню"}
               aria-expanded={menuOpen}
             >
-              {menuOpen ? <X size={22} /> : <Menu size={22} />}
+              {menuOpen ? <X size={20} strokeWidth={1.5} /> : <Menu size={20} strokeWidth={1.5} />}
             </button>
           </div>
         </div>
       </header>
 
-      {/* Mobile overlay */}
+      {/* Mobile overlay menu */}
       <div
-        className={cn(
-          "fixed inset-0 z-30 bg-bg flex flex-col lg:hidden transition-opacity duration-300",
-          menuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-        )}
+        style={{
+          position:  "fixed",
+          inset:     0,
+          zIndex:    30,
+          background: "var(--color-bg)",
+          display:   "flex",
+          flexDirection: "column",
+          opacity:   menuOpen ? 1 : 0,
+          pointerEvents: menuOpen ? "auto" : "none",
+          transition: "opacity 0.3s",
+        }}
         aria-hidden={!menuOpen}
       >
-        <div className="flex items-center justify-between h-16 px-4">
-          <Link href="/" className="flex flex-col leading-none">
-            <span className="font-display text-2xl font-light tracking-[0.2em] text-text">LUNA</span>
-            <span className="font-body text-[9px] font-medium tracking-[0.35em] text-gold-muted uppercase mt-[-2px]">
-              Beauty Salon
-            </span>
+        {/* Top bar */}
+        <div style={{
+          display: "flex", alignItems: "center", justifyContent: "space-between",
+          height: 72, padding: "0 24px",
+          borderBottom: "1px solid var(--color-border-soft)",
+        }}>
+          <Link href="/" style={{ display: "flex", alignItems: "center" }}>
+            <Image src="/logo.jpg" alt="Luna Beauty Salon" width={40} height={40} style={{ objectFit: "contain" }} />
           </Link>
           <button
             onClick={() => setMenuOpen(false)}
-            className="p-2 text-text-muted hover:text-gold transition-colors"
+            style={{ background: "none", border: "none", cursor: "pointer", color: "var(--color-text-muted)", padding: 8 }}
             aria-label="Закрыть меню"
           >
-            <X size={22} />
+            <X size={20} strokeWidth={1.5} />
           </button>
         </div>
 
-        <nav className="flex flex-col items-center justify-center flex-1 gap-8" aria-label="Мобильная навигация">
+        {/* Nav items */}
+        <nav
+          style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", flex: 1, gap: 40 }}
+          aria-label="Мобильная навигация"
+        >
           {navLinks.map((link, i) => (
             <Link
               key={link.href}
               href={link.href}
-              className={cn(
-                "font-display text-4xl font-light italic transition-colors duration-200",
-                pathname === link.href ? "text-gold" : "text-text hover:text-gold"
-              )}
-              style={{ transitionDelay: menuOpen ? `${i * 60}ms` : "0ms" }}
+              style={{
+                fontFamily:    "var(--font-cormorant), Georgia, serif",
+                fontSize:      "clamp(2rem, 8vw, 3rem)",
+                fontWeight:    300,
+                fontStyle:     "italic",
+                color:         pathname === link.href ? "var(--color-gold)" : "var(--color-text)",
+                textDecoration: "none",
+                letterSpacing: "-0.01em",
+                transition:    "color 0.2s",
+                transitionDelay: menuOpen ? `${i * 50}ms` : "0ms",
+              }}
             >
               {link.label}
             </Link>
           ))}
         </nav>
 
-        <div className="pb-12 text-center">
-          <p className="font-body text-sm text-text-muted tracking-wide">+7 777 183 8414</p>
+        <div style={{ paddingBottom: 48, textAlign: "center" }}>
+          <p style={{
+            fontFamily:    "var(--font-inter), system-ui, sans-serif",
+            fontSize:      12,
+            color:         "var(--color-text-muted)",
+            letterSpacing: "0.1em",
+          }}>
+            +7 777 183 8414
+          </p>
         </div>
       </div>
+
+      <style jsx global>{`
+        @media (max-width: 768px) {
+          .hidden-mobile { display: none !important; }
+          .show-mobile   { display: flex !important; }
+          header > div   { padding: 0 24px !important; }
+        }
+        .nav-link:hover { color: var(--color-text) !important; }
+      `}</style>
     </>
   );
 }

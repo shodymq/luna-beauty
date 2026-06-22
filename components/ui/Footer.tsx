@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Instagram, Phone, MapPin } from "lucide-react";
 import { brand, branches } from "@/lib/data";
 
@@ -6,91 +7,112 @@ export default function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="bg-surface border-t border-border">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+    <footer style={{
+      background:  "var(--color-surface)",
+      borderTop:   "1px solid var(--color-border-soft)",
+    }}>
+      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "80px 80px 48px" }}>
+        <div style={{
+          display:             "grid",
+          gridTemplateColumns: "repeat(4, 1fr)",
+          gap:                 40,
+          marginBottom:        64,
+        }}>
+
           {/* Brand */}
-          <div className="lg:col-span-1">
-            <Link href="/" className="flex flex-col leading-none mb-4">
-              <span className="font-display text-3xl font-light tracking-[0.2em] text-text">LUNA</span>
-              <span className="font-body text-[9px] font-medium tracking-[0.35em] text-gold-muted uppercase mt-[-2px]">
-                Beauty Salon
-              </span>
+          <div>
+            <Link href="/" style={{ display: "inline-block", marginBottom: 20 }}>
+              <Image src="/logo.jpg" alt="Luna Beauty Salon" width={56} height={56} style={{ objectFit: "contain" }} />
             </Link>
-            <p className="font-body text-sm text-text-muted leading-relaxed mt-4">
+            <p style={{
+              fontFamily:  "var(--font-inter), system-ui, sans-serif",
+              fontSize:    13,
+              fontWeight:  300,
+              color:       "var(--color-text-muted)",
+              lineHeight:  1.7,
+              marginTop:   8,
+            }}>
               {brand.tagline}
             </p>
           </div>
 
           {/* Navigation */}
           <div>
-            <h3 className="font-body text-xs font-medium tracking-[0.15em] uppercase text-gold mb-5">
-              Навигация
-            </h3>
-            <nav className="flex flex-col gap-3" aria-label="Навигация в футере">
+            <div className="gold-divider" style={{ marginBottom: 24 }}>
+              <div className="line" />
+              <span className="label">Навигация</span>
+              <div className="line" />
+            </div>
+            <nav aria-label="Навигация в футере">
               {[
-                { href: "/", label: "Главная" },
-                { href: "/uslugi", label: "Услуги и прайс" },
+                { href: "/",        label: "Главная" },
+                { href: "/uslugi",  label: "Услуги и прайс" },
                 { href: "/gallery", label: "Галерея" },
                 { href: "/filialy", label: "Филиалы" },
-              ].map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="font-body text-sm text-text-muted hover:text-gold transition-colors duration-200"
-                >
-                  {link.label}
-                </Link>
+              ].map((l) => (
+                <div key={l.href} style={{ marginBottom: 12 }}>
+                  <Link href={l.href} style={{
+                    fontFamily: "var(--font-inter), system-ui, sans-serif",
+                    fontSize:   13,
+                    fontWeight: 300,
+                    color:      "var(--color-text-muted)",
+                    textDecoration: "none",
+                    transition: "color 0.2s",
+                  }}
+                    className="footer-link"
+                  >
+                    {l.label}
+                  </Link>
+                </div>
               ))}
             </nav>
           </div>
 
           {/* Contacts */}
           <div>
-            <h3 className="font-body text-xs font-medium tracking-[0.15em] uppercase text-gold mb-5">
-              Контакты
-            </h3>
-            <div className="flex flex-col gap-4">
-              <a
-                href={`tel:${brand.phone.replace(/\s/g, "")}`}
-                className="flex items-center gap-2 font-body text-sm text-text-muted hover:text-gold transition-colors duration-200"
+            <div className="gold-divider" style={{ marginBottom: 24 }}>
+              <div className="line" />
+              <span className="label">Контакты</span>
+              <div className="line" />
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+              <a href={`tel:${brand.phone.replace(/\s/g, "")}`}
+                style={{ display: "flex", alignItems: "center", gap: 8, color: "var(--color-text-muted)", textDecoration: "none", fontSize: 13, fontWeight: 300, transition: "color 0.2s" }}
+                className="footer-link"
               >
-                <Phone size={14} strokeWidth={1.5} />
-                {brand.phone}
+                <Phone size={13} strokeWidth={1.5} /> {brand.phone}
               </a>
-              <a
-                href={`https://instagram.com/${brand.instagram1}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 font-body text-sm text-text-muted hover:text-gold transition-colors duration-200"
+              <a href={`https://instagram.com/${brand.instagram1}`} target="_blank" rel="noopener noreferrer"
+                style={{ display: "flex", alignItems: "center", gap: 8, color: "var(--color-text-muted)", textDecoration: "none", fontSize: 13, fontWeight: 300, transition: "color 0.2s" }}
+                className="footer-link"
               >
-                <Instagram size={14} strokeWidth={1.5} />
-                @{brand.instagram1}
+                <Instagram size={13} strokeWidth={1.5} /> @{brand.instagram1}
               </a>
-              <a
-                href={`https://instagram.com/${brand.instagram2}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 font-body text-sm text-text-muted hover:text-gold transition-colors duration-200"
+              <a href={`https://instagram.com/${brand.instagram2}`} target="_blank" rel="noopener noreferrer"
+                style={{ display: "flex", alignItems: "center", gap: 8, color: "var(--color-text-muted)", textDecoration: "none", fontSize: 13, fontWeight: 300, transition: "color 0.2s" }}
+                className="footer-link"
               >
-                <Instagram size={14} strokeWidth={1.5} />
-                @{brand.instagram2}
+                <Instagram size={13} strokeWidth={1.5} /> @{brand.instagram2}
               </a>
             </div>
           </div>
 
           {/* Branches */}
           <div>
-            <h3 className="font-body text-xs font-medium tracking-[0.15em] uppercase text-gold mb-5">
-              Филиалы
-            </h3>
-            <div className="flex flex-col gap-5">
+            <div className="gold-divider" style={{ marginBottom: 24 }}>
+              <div className="line" />
+              <span className="label">Филиалы</span>
+              <div className="line" />
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
               {branches.map((b) => (
-                <div key={b.id} className="flex gap-2">
-                  <MapPin size={14} strokeWidth={1.5} className="text-gold-muted mt-0.5 flex-shrink-0" />
+                <div key={b.id} style={{ display: "flex", gap: 8 }}>
+                  <MapPin size={13} strokeWidth={1.5} style={{ color: "var(--color-gold-muted)", marginTop: 2, flexShrink: 0 }} />
                   <div>
-                    <p className="font-body text-sm text-text font-medium">{b.name}</p>
-                    <p className="font-body text-xs text-text-muted mt-0.5">
+                    <p style={{ fontFamily: "var(--font-inter)", fontSize: 13, fontWeight: 400, color: "var(--color-text)", marginBottom: 2 }}>
+                      {b.name}
+                    </p>
+                    <p style={{ fontFamily: "var(--font-inter)", fontSize: 12, fontWeight: 300, color: "var(--color-text-muted)" }}>
                       {b.city}, {b.address}
                     </p>
                   </div>
@@ -100,16 +122,34 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Bottom */}
-        <div className="mt-12 pt-6 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-2">
-          <p className="font-body text-xs text-text-muted">
+        {/* Bottom bar */}
+        <div style={{
+          borderTop:  "1px solid var(--color-border-soft)",
+          paddingTop: 24,
+          display:    "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexWrap:   "wrap",
+          gap:        8,
+        }}>
+          <p style={{ fontFamily: "var(--font-inter)", fontSize: 11, fontWeight: 300, color: "var(--color-text-dim)", letterSpacing: "0.05em" }}>
             © {year} Luna Beauty Salon. Алматы
           </p>
-          <p className="font-body text-xs text-text-muted">
+          <p style={{ fontFamily: "var(--font-inter)", fontSize: 11, fontWeight: 300, color: "var(--color-text-dim)", letterSpacing: "0.05em" }}>
             Режим работы: уточняйте по WhatsApp
           </p>
         </div>
       </div>
+
+      <style jsx global>{`
+        .footer-link:hover { color: var(--color-gold) !important; }
+        @media (max-width: 768px) {
+          footer > div { padding: 48px 24px 32px !important; grid-template-columns: 1fr 1fr !important; }
+        }
+        @media (max-width: 480px) {
+          footer > div { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
     </footer>
   );
 }
